@@ -1,4 +1,3 @@
-// Existing imports
 const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
@@ -14,9 +13,6 @@ const userRoutes = require("./routes/users")
 const testRoutes = require("./routes/tests")
 const resultRoutes = require("./routes/results")
 const statisticsRoutes = require("./routes/statistics")
-
-// Import database debug
-const { checkDatabaseConnection } = require("./debug-db")
 
 // Create Express app
 const app = express()
@@ -42,11 +38,11 @@ app.use("/api/results", resultRoutes)
 app.use("/api/statistics", statisticsRoutes)
 
 // Oddiy API endpointlar (frontend uchun)
+app.use("/auth", authRoutes)
 app.use("/users", userRoutes)
 app.use("/tests", testRoutes)
 app.use("/results", resultRoutes)
 app.use("/statistics", statisticsRoutes)
-app.use("/auth", authRoutes)
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -65,12 +61,36 @@ app.get("/", (req, res) => {
 
 // Debug endpoint
 app.get("/debug", async (req, res) => {
-  const isConnected = await checkDatabaseConnection()
-  res.json({
-    success: isConnected,
-    message: isConnected ? "Database is connected" : "Database connection has issues",
-    timestamp: new Date().toISOString(),
-  })
+  try {
+    // Check database connection
+    const { db } = require("./config/firebase")
+
+    // Try to get a user
+    const usersSnapshot = await db.collection("users").limit(1).get()
+    const hasUsers = !usersSnapshot.empty
+
+    // Try to get a test
+    const testsSnapshot = await db.collection("tests").limit(1).get()
+    const hasTests = !testsSnapshot.empty
+
+    res.json({
+      success: true,
+      message: "API server is running in " + (hasUsers || hasTests ? "database" : "demo") + " mode",
+      timestamp: new Date().toISOString(),
+      database: {
+        hasUsers,
+        hasTests,
+        mode: hasUsers || hasTests ? "database" : "demo",
+      },
+    })
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "API server is running in demo mode due to database error",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    })
+  }
 })
 
 // Error handling middleware
@@ -82,8 +102,5 @@ app.use((err, req, res, next) => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Backend server ${PORT} portida ishga tushirildi`)
-  console.log("Firebase Firestore bilan bog'langan")
-
-  // Check database connection on startup
-  checkDatabaseConnection()
+  console.log("Firebase Firestore bilan bog'langan (yoki demo rejimda)")
 })
