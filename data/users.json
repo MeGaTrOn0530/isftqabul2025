@@ -1,0 +1,24 @@
+[
+  {
+    "id": "e7636f22-8b51-4f93-b4a5-0fe8bb23f108",
+    "firstName": "azizbek",
+    "lastName": "avalov",
+    "direction": "Mathematics",
+    "phone": "+998 93 003 05 30",
+    "telegram": "@MeGaTrOn0530",
+    "login": "avalov",
+    "password": "azizbek",
+    "createdAt": 1747937335204
+  },
+  {
+    "id": "b5278992-0ba1-4be7-9c2a-f9d7a27a97c5",
+    "firstName": "asdkf",
+    "lastName": "dsalouhf",
+    "direction": "Mathematics",
+    "phone": "+998 93 003 05 30",
+    "telegram": "@MeGaTrOn0530",
+    "login": "adsalouhf",
+    "password": "11",
+    "createdAt": 1747937618625
+  }
+]

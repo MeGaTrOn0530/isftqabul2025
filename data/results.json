@@ -1,0 +1,89 @@
+[
+  {
+    "id": "3d7c767a-a9be-41c5-bf6e-9b411511d960",
+    "userId": "10b474eb-179a-4445-9c80-fe08fad526c5",
+    "testId": "078fc230-c1c3-4b6a-a098-20733c8721a0",
+    "testTitle": "aaaaaa",
+    "answers": [
+      "a",
+      "c"
+    ],
+    "correctAnswers": 2,
+    "totalQuestions": 2,
+    "score": 100,
+    "timeTaken": 0,
+    "date": 1747936097626
+  },
+  {
+    "id": "eae0596d-04e2-41d0-aae7-1f2bc43c2394",
+    "userId": "b5278992-0ba1-4be7-9c2a-f9d7a27a97c5",
+    "testId": "bf7a094d-5418-40b0-91b9-cdf6b479f6a9",
+    "testTitle": "matematika",
+    "answers": [
+      "a"
+    ],
+    "correctAnswers": 1,
+    "totalQuestions": 1,
+    "score": 100,
+    "timeTaken": 0,
+    "date": 1747937647908
+  },
+  {
+    "id": "5af70394-a0c3-463e-82e8-228e264fab85",
+    "userId": "b5278992-0ba1-4be7-9c2a-f9d7a27a97c5",
+    "testId": "078fc230-c1c3-4b6a-a098-20733c8721a0",
+    "testTitle": "aaaaaa",
+    "answers": [
+      "a",
+      "b"
+    ],
+    "correctAnswers": 1,
+    "totalQuestions": 2,
+    "score": 50,
+    "timeTaken": 0,
+    "date": 1747937798466
+  },
+  {
+    "id": "51ec026f-f54f-4c58-89e4-1e2c9c657d7a",
+    "userId": "e7636f22-8b51-4f93-b4a5-0fe8bb23f108",
+    "testId": "bf7a094d-5418-40b0-91b9-cdf6b479f6a9",
+    "testTitle": "matematika",
+    "answers": [
+      "a"
+    ],
+    "correctAnswers": 1,
+    "totalQuestions": 1,
+    "score": 100,
+    "timeTaken": 0,
+    "date": 1747938191670
+  },
+  {
+    "id": "f555e6d7-30a9-4a96-a618-9828c9579494",
+    "userId": "e7636f22-8b51-4f93-b4a5-0fe8bb23f108",
+    "testId": "078fc230-c1c3-4b6a-a098-20733c8721a0",
+    "testTitle": "aaaaaa",
+    "answers": [
+      "c",
+      "a"
+    ],
+    "correctAnswers": 0,
+    "totalQuestions": 2,
+    "score": 0,
+    "timeTaken": 0,
+    "date": 1747938202781
+  },
+  {
+    "id": "82e4f8f6-adca-4048-adea-b3d72e8bce96",
+    "userId": "e7636f22-8b51-4f93-b4a5-0fe8bb23f108",
+    "testId": "bf7a094d-5418-40b0-91b9-cdf6b479f6a9",
+    "testTitle": "matematika",
+    "answers": [
+      "b"
+    ],
+    "correctAnswers": 0,
+    "totalQuestions": 1,
+    "score": 0,
+    "timeTaken": 0,
+    "date": 1747938214994
+  }
+]
