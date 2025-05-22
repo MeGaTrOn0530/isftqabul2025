@@ -1,3 +1,4 @@
+// Existing imports
 const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
@@ -14,52 +15,21 @@ const testRoutes = require("./routes/tests")
 const resultRoutes = require("./routes/results")
 const statisticsRoutes = require("./routes/statistics")
 
+// Import database debug
+const { checkDatabaseConnection } = require("./debug-db")
+
 // Create Express app
 const app = express()
 const PORT = process.env.PORT || 3000
 
-// CORS middleware - enable CORS for specific origins
+// CORS middleware - BARCHA domainlar uchun ruxsat berish
 app.use(
   cors({
-    origin: [
-      "https://testplat-forma.netlify.app", // Frontend domeningiz
-      "http://localhost:3000",
-      "http://localhost:5000",
-      "http://localhost:8080",
-      "http://127.0.0.1:5500",
-    ],
+    origin: "*", // Barcha domainlarga ruxsat berish
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"],
-    credentials: true,
   }),
 )
-
-// Add specific CORS headers for all routes
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    "https://testplat-forma.netlify.app", // Frontend domeningiz
-    "http://localhost:3000",
-    "http://localhost:5000",
-    "http://localhost:8080",
-    "http://127.0.0.1:5500",
-  ]
-
-  const origin = req.headers.origin
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin)
-  }
-
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With")
-  res.header("Access-Control-Allow-Credentials", "true")
-
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.status(200).end()
-  }
-
-  next()
-})
 
 // Body parser middleware
 app.use(bodyParser.json())
@@ -71,18 +41,35 @@ app.use("/api/tests", testRoutes)
 app.use("/api/results", resultRoutes)
 app.use("/api/statistics", statisticsRoutes)
 
+// Oddiy API endpointlar (frontend uchun)
+app.use("/users", userRoutes)
+app.use("/tests", testRoutes)
+app.use("/results", resultRoutes)
+app.use("/statistics", statisticsRoutes)
+app.use("/auth", authRoutes)
+
 // Health check endpoint
 app.get("/", (req, res) => {
   res.json({
     message: "API server is running",
     timestamp: new Date().toISOString(),
     endpoints: {
-      auth: "/api/auth",
-      users: "/api/users",
-      tests: "/api/tests",
-      results: "/api/results",
-      statistics: "/api/statistics",
+      auth: "/api/auth or /auth",
+      users: "/api/users or /users",
+      tests: "/api/tests or /tests",
+      results: "/api/results or /results",
+      statistics: "/api/statistics or /statistics",
     },
+  })
+})
+
+// Debug endpoint
+app.get("/debug", async (req, res) => {
+  const isConnected = await checkDatabaseConnection()
+  res.json({
+    success: isConnected,
+    message: isConnected ? "Database is connected" : "Database connection has issues",
+    timestamp: new Date().toISOString(),
   })
 })
 
@@ -96,4 +83,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Backend server ${PORT} portida ishga tushirildi`)
   console.log("Firebase Firestore bilan bog'langan")
+
+  // Check database connection on startup
+  checkDatabaseConnection()
 })
