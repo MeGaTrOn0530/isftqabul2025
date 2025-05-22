@@ -18,14 +18,40 @@ const statisticsRoutes = require("./routes/statistics")
 const app = express()
 const PORT = process.env.PORT || 3000
 
-// CORS middleware - enable CORS for all origins
-app.use(cors())
+// CORS middleware - enable CORS for specific origins
+app.use(
+  cors({
+    origin: [
+      "https://testplat-forma.netlify.app", // Frontend domeningiz
+      "http://localhost:3000",
+      "http://localhost:5000",
+      "http://localhost:8080",
+      "http://127.0.0.1:5500",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"],
+    credentials: true,
+  }),
+)
 
 // Add specific CORS headers for all routes
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
+  const allowedOrigins = [
+    "https://testplat-forma.netlify.app", // Frontend domeningiz
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:8080",
+    "http://127.0.0.1:5500",
+  ]
+
+  const origin = req.headers.origin
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin)
+  }
+
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With")
+  res.header("Access-Control-Allow-Credentials", "true")
 
   // Handle preflight requests
   if (req.method === "OPTIONS") {
@@ -45,20 +71,19 @@ app.use("/api/tests", testRoutes)
 app.use("/api/results", resultRoutes)
 app.use("/api/statistics", statisticsRoutes)
 
-// Serve static files from frontend directory
-app.use(express.static(path.join(__dirname, "../frontend")))
-
-// Define specific routes for HTML files instead of catch-all
+// Health check endpoint
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"))
-})
-
-app.get("/dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dashboard.html"))
-})
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/admin.html"))
+  res.json({
+    message: "API server is running",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: "/api/auth",
+      users: "/api/users",
+      tests: "/api/tests",
+      results: "/api/results",
+      statistics: "/api/statistics",
+    },
+  })
 })
 
 // Error handling middleware
